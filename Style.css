@@ -36,5 +36,14 @@ li {
 	color:white;
 }
 
-
-
+#readMoreBtn {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    background-color: black;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
