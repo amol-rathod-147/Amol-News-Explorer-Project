@@ -1,7 +1,7 @@
 body {
-	padding: 30px;
-	margin: 0px;
-    padding-top:0px ;
+	/* padding: 30px; */
+	margin-left: 1cm;
+    margin-right:1cm ;
 }
 
 ul {
@@ -27,6 +27,9 @@ li {
 .page{
     padding-top:1cm;
 }
+#heading{
+    margin-left: 1cm;
+}
 .block{
 	margin-left:10px;
 	margin-top:10px;
@@ -34,6 +37,7 @@ li {
 	padding:20px;
 	width:40%;
 	text-align:justify;
+    background-color: lightgray;
 }
 .selected{
 	background-color:black;
@@ -62,5 +66,6 @@ li {
 	padding:10px;
     margin-left: 29px;
     position: fixed;
-    /* margin-top: 10px; */
+    
+    margin-top: -2px;
 }
