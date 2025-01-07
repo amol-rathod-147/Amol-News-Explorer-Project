@@ -1,0 +1,40 @@
+body {
+	padding: 30px;
+	margin: 0px;
+}
+
+ul {
+	display: flex; 
+	list-style-type:none;
+}
+
+li {
+  margin-left: 10px; 
+	background-color:gray;
+	padding:10px;
+	border-radius:5px;
+	font-size:25px;
+	text-transform: capitalize;
+ cursor: pointer;
+}
+.display{
+	display: flex;
+  flex-wrap: wrap;
+	text-align:center;
+	justify-content:center;
+}
+.block{
+	margin-left:10px;
+	margin-top:10px;
+	border:2px solid black;
+	padding:20px;
+	width:40%;
+	text-align:justify;
+}
+.selected{
+	background-color:black;
+	color:white;
+}
+
+
+
