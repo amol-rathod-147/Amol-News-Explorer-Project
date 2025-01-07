@@ -47,3 +47,7 @@ li {
     font-size: 16px;
     cursor: pointer;
 }
+
+.highlight {
+    background-color: rgb(189, 91, 61);
+}

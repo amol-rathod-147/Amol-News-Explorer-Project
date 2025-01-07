@@ -352,78 +352,104 @@ const data = [
     },
   ];
   
-  let nav = document.querySelector('.nav');
-  let ul = document.querySelector('ul');
-  let li1 = document.createElement('li');
-  li1.classList.add('nav-item');
-  li1.textContent = "All";
-  li1.setAttribute('data-category', "all");
-  li1.classList.add('selected');
-  ul.appendChild(li1);
-  
-  let allCategory = ["all"];
-  
-  data.forEach(obj => {
-      if (!allCategory.includes(obj.category)) {
-          allCategory.push(obj.category);
-          let li = document.createElement('li');
-          li.classList.add('nav-item');
-          li.setAttribute('data-category', obj.category);
-          li.textContent = obj.category.charAt(0).toUpperCase() + obj.category.slice(1);
-          ul.appendChild(li);
-      }
-  });
-  
-  let allNews = document.querySelector('.display');
-  let readMoreBtn = document.querySelector('#readMoreBtn');
+let nav = document.querySelector('.nav');
+let ul = document.querySelector('ul');
+let li1 = document.createElement('li');
+li1.classList.add('nav-item');
+li1.textContent = "All";
+li1.setAttribute('data-category', "all");
+li1.classList.add('selected');
+ul.appendChild(li1);
 
-  const navItems = ul.querySelectorAll('.nav-item');
-  let newsLimit = 6;
-  let isExpanded = false;
-  
-  const displayNews=(categories) =>{
-      allNews.innerHTML = '';
-      const filteredData = data.filter(obj2 => categories.includes('all') || categories.includes(obj2.category));
-      const newsToDisplay = isExpanded ? filteredData : filteredData.slice(0, newsLimit);
-      
-      newsToDisplay.forEach(obj2 => {
-          let div = document.createElement('div');
-          div.classList.add('block');
-          let heading = document.createElement('h1');
-          let dateTime = document.createElement('p');
-          let content = document.createElement('p');
-  
-          heading.textContent = obj2.title;
-          dateTime.textContent = obj2.dateAndTime;
-          content.textContent = obj2.content;
-  
-          div.appendChild(heading);
-          div.appendChild(dateTime);
-          div.appendChild(content);
-  
-          allNews.appendChild(div);
-      });
-  
-      
+let allCategory = ["all"];
+data.forEach(obj => {
+    if (!allCategory.includes(obj.category)) {
+        allCategory.push(obj.category);
+        let li = document.createElement('li');
+        li.classList.add('nav-item');
+        li.setAttribute('data-category', obj.category);
+        li.textContent = obj.category.charAt(0).toUpperCase() + obj.category.slice(1);
+        ul.appendChild(li);
+    }
+});
+
+let allNews = document.querySelector('.display');
+let readMoreBtn = document.querySelector('#readMoreBtn');
+
+const navItems = ul.querySelectorAll('.nav-item');
+let newsLimit = 6;
+let isExpanded = false;
+
+const displayNews = (categories, searchTerm = '') => {
+    allNews.innerHTML = '';
+    const filteredData = data.filter(obj2 => categories.includes('all') || categories.includes(obj2.category));
+    const newsToDisplay = isExpanded ? filteredData : filteredData.slice(0, newsLimit);
+
+    newsToDisplay.forEach(obj2 => {
+        let div = document.createElement('div');
+        div.classList.add('block');
+        let heading = document.createElement('h1');
+        let dateTime = document.createElement('p');
+        let content = document.createElement('p');
+
+        heading.textContent = obj2.title;
+        dateTime.textContent = obj2.dateAndTime;
+
+        let highlightedContent = obj2.content;
+        if (searchTerm) {
+            const regex = new RegExp(`(${searchTerm})`, 'gi');
+            highlightedContent = highlightedContent.replace(regex, '<span class="highlight">$1</span>');
+        }
+
+        content.innerHTML = highlightedContent;
+
+        div.appendChild(heading);
+        div.appendChild(dateTime);
+        div.appendChild(content);
+
+        allNews.appendChild(div);
+    });
+
     if (filteredData.length > newsLimit) {
         readMoreBtn.style.display = 'block';
     } else {
         readMoreBtn.style.display = 'none';
     }
-  }
-  
-  displayNews(['all']);
+}
 
+displayNews(['all']);
 
-  readMoreBtn.addEventListener('click', () => {
+readMoreBtn.addEventListener('click', () => {
     isExpanded = !isExpanded;
     readMoreBtn.textContent = isExpanded ? 'Show Less' : 'Read More';
-    displayNews(Array.from(navItems)
-        .filter(i => i.classList.contains('selected'))
-        .map(i => i.dataset.category));
+    displayNews(
+        Array.from(navItems)
+            .filter(i => i.classList.contains('selected'))
+            .map(i => i.dataset.category)
+    );
 });
 
-  
+const debounce = (func, delay) => {
+    let timer;
+    return function (...args) {
+        clearTimeout(timer);
+        timer = setTimeout(() => func.apply(this, args), delay);
+    };
+};
 
-  
-  
+const searchInput = document.getElementById('searchInput');
+
+const handleSearch = () => {
+    const searchTerm = searchInput.value.trim();
+    displayNews(
+        Array.from(navItems)
+            .filter(i => i.classList.contains('selected'))
+            .map(i => i.dataset.category),
+        searchTerm
+    );
+};
+
+const debouncedSearch = debounce(handleSearch, 500);
+searchInput.addEventListener('input', debouncedSearch);
+
+
